@@ -1,0 +1,361 @@
+siastic<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h1>Elm 101</h1>
+          <h3>A Functional Approach to Web Apps</h3>
+          <p>
+            <small>Bill Peregoy / <a
+                href="http://twitter.com/billperegoy">@billperegoy</a></small>
+          </p>
+        </section>
+
+        <section>
+          <h1>Why Elm?</h1>
+          <ul>
+            <li class="fragment">Fully Functional Language</li>
+            <li class="fragment">Strongly Typed</li>
+            <li class="fragment">Immutable Data Only</li>
+            <li class="fragment">All Functions are Pure</li>
+            <li class="fragment">Controlled Use of Side Effects</li>
+            <li class="fragment">One-way Data Flow</li>
+            <li class="fragment">Uses Virtual DOM</li>
+            <li class="fragment">Transpiles to JavaScript</li>
+            <li class="fragment">Simple Interop with JavaScript</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Elm Architecture</h1>
+          <p>Elm is more than just a programming language. It also enforces an
+          architectural pattern.</p>
+          <ul>
+            <li class="fragment">Model - all program state is stored here</li>
+            <li class="fragment">View - pure function converting model to HTML</li>
+            <li class="fragment">Update - pure function used to modify state</li>
+            <li class="fragment">Controlled Effects - HTTP, etc.</li>
+            <li class="fragment">Subscriptions - Websockets, time, etc.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>A Simple View</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+main =
+    view
+
+view =
+    h1 [ class "header" ] [ text "Hello World" ]
+          </code></pre>
+          <ul>
+            <li class="fragment">main and view are functions</li>
+            <li class="fragment">All HTML elements map into Elm functions</li>
+            <li class="fragment">HTML elements take two arguments</li>
+            <ul>
+              <li class="fragment">A list of HTML attributes</li>
+              <li class="fragment">A list of nested HTML elements</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h1>Adding a Model</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+type alias Todo =
+    { id : Int
+    , name : String
+    , complete : Bool
+    }
+
+model =
+    { todos = List Todo
+    , nextId = Int
+    , todoInput = String
+    }
+          </code></pre>
+          <ul>
+            <li class="fragment">Allows complex types</li>
+            <li class="fragment">Everything strongly typed</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Using the Model</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+view model =
+    div [] 
+         [
+           h1 [] [ text "Todo List" ]
+         , ul [] 
+             List.map 
+                 (/todo -> li [] [ text todo.name ])
+                 model.todos
+
+         ]
+          </code></pre>
+          <ul>
+            <li class="fragment">View uses model data as parameter</li>
+            <li class="fragment">View is just code</li>
+            <li class="fragment">Can generate HTML with code</li>
+            <li class="fragment">View function is 100% pure</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>The init function</h1>
+        </section>
+
+        <section>
+          <h1>Messages</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+type Msg
+    = Add String
+    | Delete Int
+    | ToggleComplete Int
+    | UpdateTodoInput String
+          </code></pre>
+          <ul>
+            <li class="fragment">Uses Elm Union type</li>
+            <li class="fragment">Each type can  take parameters</li>
+            <li class="fragment">This defines all possible ways to change state</li>
+            <li class="fragment">Msg types summarize what your app can do</li>
+          </u>
+        </section>
+
+        <section>
+          <h1>Update Function</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+update msg model =
+    case msg of
+        AddTodo name ->
+            let
+                newTodo = Todo model.id name False
+            in
+                { model |
+                  todos = newTodo :: model.todos
+                , nextId = model.nextId + 1
+                } ! []
+
+        _ ->
+            model ! []
+          </code></pre>
+          <ul>
+            <li class="fragment">Takes a Msg and a model - returns a new model</li>
+            <li class="fragment">Must account for all Msg types (or have catch-all)</li>
+            <li class="fragment">Updates can also trigger side-effects</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Putting it Together</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+main =
+    Html.program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+          </code></pre>
+          <ul>
+            <li class="fragment">Top-level program accepts 4 functions</li>
+            <ul>
+              <li class="fragment">Initial model values function</li>
+              <li class="fragment">View Function</li>
+              <li class="fragment">Update Function</li>
+              <li class="fragment">Subscriptions Function</li>
+            </ul>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Message Actions</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+  input
+    [ onInput UpdatetoDoInput ]
+     []
+, button
+    [ onClick Add model.todoInput ]
+    [ text "Add" ]
+          </code></pre>
+          <ul>
+            <li class="fragment">Any key event in input field triggers UpdateTodoInput</li>
+            <li class="fragment">Button press triggers Add</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>The Whole Flow</h1>
+          <ol>
+            <li class="fragment">HTML events trigger Msg to update function</li>
+            <li class="fragment">Msg processing in update produces new model</li>
+            <li class="fragment">Model change causes view update</li>
+            <li class="fragment">View update renders new HTML to screen</li>
+          </ol>
+        </section>
+
+        <section>
+          <h1>Flow Diagram</h1>
+          <img width="750px" src="images/elm_arch.png">
+        </section>
+
+        <section>
+          <h1>Effects</h1>
+          <ul>
+            <li class="fragment">Any update action can also cause an effect</li>
+            <li class="fragment">Effects trigger an external asyncronous operation</li>
+            <li class="fragment">Effects run externally and eventually produce a Msg type</li>
+            <li class="fragment">The resultng Msg triggers an update action</li>
+            <li class="fragment">Effects fit in the same model as internal ops</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>HTTP Example</h1>
+          <ol>
+            <li class="fragment">Internal event creates a Msg</li>
+            <li class="fragment">That Msg triggers an HTTP call</li>
+            <li class="fragment">Http call runs externally</li>
+            <li class="fragment">Upon completion, HTTP sends a success/fail Msg</li>
+            <li class="fragment">Update function changes model based on HTTP results</li>
+            <li class="fragment">View updates based upon model change</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Uncertainty</h1>
+          <ul>
+            <li class="fragment">All execution uncertainty must be handled</li>
+            <li class="fragment">Compiler will not allow unkown results</li>
+            <li class="fragment">There are no null or undefined data types</li>
+            <li class="fragment">Code must do something in corner cases</li>
+            <li class="fragment">End result - "undefined is not a function" never happens!</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>JavaScript Interop</h1>
+          <ul>
+            <li class="fragment">Elm components can coexist on existing pages</li>
+            <ul>
+              <li class="fragment">Elm apps can be embedded in existing HTML pages</li>
+              <li class="fragment">React components can be Elm apps under the hood</li>
+            </ul>
+            <li class="fragment">Elm apps can communicate with external JavaScript</li>
+            <ul>
+              <li class="fragment">Msgs sent to external JS via JSON</li>
+              <li class="fragment">Results returned via Elm subscriptions</li>
+            </ul>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Examples</h1>
+        </section>
+
+        <section>
+          <h1>State of Elm</h1>
+          <ul>
+            <li class="fragment">Still in pre-release</li>
+            <li class="fragment">New releases bring breaking changes</li>
+            <li class="fragment">Friendly and enthusiastic community</li>
+            <li class="fragment">Handful of companies using in production</li>
+            <li class="fragment">Open source development funded by No Red Ink</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Summary</h1>
+          <ul>
+            <li class="fragment">Elm addresses many current front-end pain points</li>
+            <ul>
+              <li class="fragment">Components - offers React like components</li>
+              <li class="fragment">State Management - Redux pattern is based on Elm</li>
+              <li class="fragment">Virtual Dom - as fast or faster than React rendering</li>
+              <li class="fragment">Functional Programming - no  need for libraries</li>
+              <li class="fragment">Runtime Errors - They don't exist in Elm</li>
+              <li class="fragment">Interop - plays well with legacy code</li>
+            </ul>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Resources</h1>
+          <ul>
+            <li><a href="http://elm-lang.org/">elm-lang.org</a></li>
+            <li><a href="https://guide.elm-lang.org/architecture/">Elm Architecture</a></li>
+            <li><a href="https://www.manning.com/books/elm-in-action">Elm in Action</a></li>
+            <li><a href="https://www.meetup.com/Boston-Elm/">Boston Elm Meetup</a></li>
+            <li><a href="http://elmlang.herokuapp.com/">Elm Slack</a></li>
+            <li><a href="http://becoming-functional.com">becoming-functional.com</a></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        <section>
+          <h1>Summary</h1>
+          <ul>
+            <li class="fragment">Elm addresses many current front-end pain points</li>
+            <ul>
+              <li class="fragment">Components - offers React like components</li>
+              <li class="fragment">State Management - Redux pattern is based on Elm</li>
+              <li class="fragment">Virtual Dom - as fast or faster than React rendering</li>
+              <li class="fragment">Functional Programming - no  need for libraries</li>
+              <li class="fragment">Runtime Errors - They don't exist in Elm</li>
+              <li class="fragment">Interop - plays well wit legacy code</li>
+            </ul>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
