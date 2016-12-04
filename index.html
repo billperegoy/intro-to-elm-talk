@@ -127,6 +127,17 @@ view model =
 
         <section>
           <h1>The init function</h1>
+          <pre><code class="hlelm" data-trim contenteditable>
+init =
+    { todos = []
+    , nextId = 1
+    , todoInput = ""
+    }
+          </code></pre>
+          <ul>
+            <li class="fragment">Define the initial state of the model</li>
+            <li class="fragment">Everything must be initailized</li>
+          </ul>
         </section>
 
         <section>
@@ -153,7 +164,7 @@ update msg model =
     case msg of
         AddTodo name ->
             let
-                newTodo = Todo model.id name False
+                newTodo = Todo model.nextId name False
             in
                 { model |
                   todos = newTodo :: model.todos
@@ -164,9 +175,9 @@ update msg model =
             model ! []
           </code></pre>
           <ul>
-            <li class="fragment">Takes a Msg and a model - returns a new model</li>
+            <li class="fragment">Takes a msg and a model - returns a new model</li>
             <li class="fragment">Must account for all Msg types (or have catch-all)</li>
-            <li class="fragment">Updates can also trigger side-effects</li>
+            <li class="fragment">Updates can also trigger effects</li>
           </ul>
         </section>
 
@@ -227,21 +238,22 @@ main =
           <h1>Effects</h1>
           <ul>
             <li class="fragment">Any update action can also cause an effect</li>
-            <li class="fragment">Effects trigger an external asyncronous operation</li>
-            <li class="fragment">Effects run externally and eventually produce a Msg type</li>
+            <li class="fragment">Effects trigger an asyncronous operation</li>
+            <li class="fragment">Effects run n Elmruntime  and eventually produce Msg</li>
             <li class="fragment">The resultng Msg triggers an update action</li>
-            <li class="fragment">Effects fit in the same model as internal ops</li>
+            <li class="fragment">Effects use same architecture as internal ops</li>
+            <li class="fragment">This results in predictable behavior</li>
           </ul>
         </section>
 
         <section>
           <h1>HTTP Example</h1>
           <ol>
-            <li class="fragment">Internal event creates a Msg</li>
-            <li class="fragment">That Msg triggers an HTTP call</li>
+            <li class="fragment">Button click creates a Msg</li>
+            <li class="fragment">That Msg triggers an HTTP call (effect)</li>
             <li class="fragment">Http call runs externally</li>
-            <li class="fragment">Upon completion, HTTP sends a success/fail Msg</li>
-            <li class="fragment">Update function changes model based on HTTP results</li>
+            <li class="fragment">Upon completion, operation creates a success/fail Msg</li>
+            <li class="fragment">Update function changes model based on that Msg</li>
             <li class="fragment">View updates based upon model change</li>
           </ul>
         </section>
@@ -252,7 +264,8 @@ main =
             <li class="fragment">All execution uncertainty must be handled</li>
             <li class="fragment">Compiler will not allow unkown results</li>
             <li class="fragment">There are no null or undefined data types</li>
-            <li class="fragment">Code must do something in corner cases</li>
+            <li class="fragment">Maybe type used to denote lack of valid data</li>
+            <li class="fragment">Code must always handle Maybe</li>
             <li class="fragment">End result - "undefined is not a function" never happens!</li>
           </ul>
         </section>
@@ -296,7 +309,8 @@ main =
               <li class="fragment">Components - offers React like components</li>
               <li class="fragment">State Management - Redux pattern is based on Elm</li>
               <li class="fragment">Virtual Dom - as fast or faster than React rendering</li>
-              <li class="fragment">Functional Programming - no  need for libraries</li>
+              <li class="fragment">No need for libraries to enforce Functional style</li>
+              <li class="fragment">Strong type checking finds problems before run time</li>
               <li class="fragment">Runtime Errors - They don't exist in Elm</li>
               <li class="fragment">Interop - plays well with legacy code</li>
             </ul>
