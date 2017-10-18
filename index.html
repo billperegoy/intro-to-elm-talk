@@ -37,15 +37,15 @@
         <section>
           <h1>Why Elm?</h1>
           <ul>
-            <li class="fragment">Fully Functional Language</li>
-            <li class="fragment">Strongly Typed</li>
-            <li class="fragment">Immutable Data Only</li>
-            <li class="fragment">All Functions are Pure</li>
-            <li class="fragment">Controlled Use of Side Effects</li>
-            <li class="fragment">One-way Data Flow</li>
-            <li class="fragment">Uses Virtual DOM</li>
-            <li class="fragment">Transpiles to JavaScript</li>
-            <li class="fragment">Simple Interop with JavaScript</li>
+            <li>Fully Functional Language</li>
+            <li>Strongly Typed</li>
+            <li>Immutable Data Only</li>
+            <li>All Functions are Pure</li>
+            <li>Controlled Use of Side Effects</li>
+            <li>One-way Data Flow</li>
+            <li>Uses Virtual DOM</li>
+            <li>Transpiles to JavaScript</li>
+            <li>Simple Interop with JavaScript</li>
           </ul>
         </section>
 
@@ -63,6 +63,147 @@
         </section>
 
         <section>
+          <h2>Basic Elm Syntax</h2>
+          <ul>
+            <li>Functions</li>
+            <li>Basic Data Structures</h2>
+            <li>Functional Transforms</h1>
+            <li>Elm HTML Library</h1>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Functions</h2>
+          <pre><code class="hlelm">
+add a b =
+    a + b
+
+add 2 3
+=> 5
+         </code></pre>
+         <ul>
+           <li>Functions must return exactly one value</li>
+           <li>Functions have no side-effects</li>
+         </ul>
+        </section>
+        <section>
+          <h2>Functions</h2>
+         </code></pre>
+          <pre><code class="hlelm">
+squareOfSum a b =
+  let
+      sum = a + b
+  in
+      sum * sum  
+
+squareofSum 2 3
+=> 25
+         </code></pre>
+         <ul>
+           <li>Functions can contain local, intermediate functions</li>
+         </ul>
+        </section>
+        <section>
+          <h2>Functions</h2>
+         </code></pre>
+          <pre><code class="hlelm">
+lambda =
+    \a b -> a + b
+
+lambda 3 5
+=> 8
+         </code></pre>
+         <ul>
+           <li>This is an anonymous function (lambda)</li>
+           <li>Functions can consume and return other functions</li>
+         </ul>
+        </section>
+        </section>
+
+        <section>
+          <h2>Lists</h2>
+          <pre><code class="hlelm">
+myList = [2, 3,4]
+=> [2, 3, 4]
+
+newList = 1 :: myList
+=> [1, 2, 3, 4]
+
+myList ++ newList
+=> [1, 2, 3, 4, 2, 3, 4]
+         </code></pre>
+        </section>
+
+        <section>
+          <h2>Records</h2>
+          <pre><code class="hlelm">
+type alias Person =
+    { name : String
+    , age : Int
+    }
+
+p1 = Person "James" 23
+p2 = { name = "Jane", age = 25 }
+
+p1.name 
+=> "James"
+
+p3 = { p2 | age = 35 }
+=>  { name = "Jane", age = 35 }
+         </code></pre>
+        </section>
+
+        <section>
+          <h2>Functional Transforms</h2>
+          <pre><code class="hlelm">
+numbers = [1, 2, 3]
+
+List.map (\elem -> elem * elem) numbers
+=> [1, 4, 9]
+
+List.filter (\elem -> elem > 2) numbers
+=> [3]
+
+numbers 
+    |> List.map (\elem -> elem * elem)
+    |> List.filter (\elem -> elem > 3)
+=> [4, 9]
+
+         </code></pre>
+        </section>
+
+        <section>
+          <h2>Elm HTML Lib</h2>
+
+          <ul>
+            <li>Every HTML element has a corresponding function</li>
+            <li>Each function takes two paramaters</li>
+            <ul>
+            <li>First param is a list of HTML attributes</li>
+            <li>Second param is a list of HTML sub-elements</li>
+            </ul>
+            <li>Function nesting can be arbitrarily deep</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>HTML Examples</h2>
+          <pre><code class="hlelm">
+h1 [ class "alert"] [ text "Alert Text" ]
+
+div [ class "container", id "main-content" ] 
+    [ p [] [ text "paragraph 1" ]
+    , p [] [ text "paragraph 2" ]
+    ]
+          </code></pre>
+        </section>
+
+        <section>
+          <h2> That's It!</h2>
+          <h4>With this little bit of Elm knowledge, we can start our app</h4>
+        </section>
+
+        <section>
           <h1>A Simple View</h1>
           <pre><code class="hlelm" data-trim contenteditable>
 main =
@@ -72,12 +213,7 @@ view =
     h1 [ class "header" ] [ text "Hello World" ]
           </code></pre>
           <ul>
-            <li class="fragment">main and view are functions</li>
-            <li class="fragment">All HTML elements map into Elm functions</li>
-            <li class="fragment">HTML elements take two arguments</li>
-            <ul>
-              <li class="fragment">A list of HTML attributes</li>
-              <li class="fragment">A list of nested HTML elements</li>
+            <li">main and view are functions</li>
           </ul>
         </section>
 
@@ -85,21 +221,21 @@ view =
         <section>
           <h1>Adding a Model</h1>
           <pre><code class="hlelm" data-trim contenteditable>
+type alias model =
+    { todos : List Todo
+    , nextId : Int
+    , todoInput : String
+    }
+
 type alias Todo =
     { id : Int
     , name : String
     , complete : Bool
     }
-
-model =
-    { todos = List Todo
-    , nextId = Int
-    , todoInput = String
-    }
           </code></pre>
           <ul>
-            <li class="fragment">Allows complex types</li>
-            <li class="fragment">Everything strongly typed</li>
+            <li>Allows complex types</li>
+            <li>Everything strongly typed</li>
           </ul>
         </section>
 
@@ -118,10 +254,10 @@ view model =
          ]
           </code></pre>
           <ul>
-            <li class="fragment">View uses model data as parameter</li>
-            <li class="fragment">View is just code</li>
-            <li class="fragment">Can generate HTML with code</li>
-            <li class="fragment">View function is 100% pure</li>
+            <li>View receives model s parameter</li>
+            <li>View is just code</li>
+            <li>Can generate HTML with code</li>
+            <li>View function is 100% pure</li>
           </ul>
         </section>
 
@@ -135,8 +271,8 @@ init =
     }
           </code></pre>
           <ul>
-            <li class="fragment">Define the initial state of the model</li>
-            <li class="fragment">Everything must be initailized</li>
+            <li>Define the initial state of the model</li>
+            <li>Everything must be initailized</li>
           </ul>
         </section>
 
@@ -150,10 +286,10 @@ type Msg
     | UpdateTodoInput String
           </code></pre>
           <ul>
-            <li class="fragment">Uses Elm Union type</li>
-            <li class="fragment">Each type can  take parameters</li>
-            <li class="fragment">This defines all possible ways to change state</li>
-            <li class="fragment">Msg types summarize what your app can do</li>
+            <li>Uses Elm Union type</li>
+            <li>Each type can  take parameters</li>
+            <li>This defines all possible ways to change state</li>
+            <li>Msg types summarize what your app can do</li>
           </u>
         </section>
 
@@ -169,15 +305,14 @@ update msg model =
                 { model |
                   todos = newTodo :: model.todos
                 , nextId = model.nextId + 1
-                } ! []
+                }
 
         _ ->
-            model ! []
+            model
           </code></pre>
           <ul>
-            <li class="fragment">Takes a msg and a model - returns a new model</li>
-            <li class="fragment">Must account for all Msg types (or have catch-all)</li>
-            <li class="fragment">Updates can also trigger effects</li>
+            <li>Takes a msg and a model - returns a new model</li>
+            <li>Must account for all Msg types (or have catch-all)</li>
           </ul>
         </section>
 
@@ -185,20 +320,18 @@ update msg model =
           <h1>Putting it Together</h1>
           <pre><code class="hlelm" data-trim contenteditable>
 main =
-    Html.program
+    Html.beginnerProgram
         { init = init
         , view = view
         , update = update
-        , subscriptions = subscriptions
         }
           </code></pre>
           <ul>
-            <li class="fragment">Top-level program accepts 4 functions</li>
+            <li>Top-level program accepts 3 functions</li>
             <ul>
-              <li class="fragment">Initial model values function</li>
-              <li class="fragment">View Function</li>
-              <li class="fragment">Update Function</li>
-              <li class="fragment">Subscriptions Function</li>
+              <li>Initial model function</li>
+              <li>View Function</li>
+              <li>Update Function</li>
             </ul>
           </ul>
         </section>
@@ -214,8 +347,8 @@ main =
     [ text "Add" ]
           </code></pre>
           <ul>
-            <li class="fragment">Any key event in input field triggers UpdateTodoInput</li>
-            <li class="fragment">Button press triggers Add</li>
+            <li>Any key event in input field triggers UpdateTodoInput</li>
+            <li>Button press triggers Add</li>
           </ul>
         </section>
 
@@ -237,12 +370,12 @@ main =
         <section>
           <h1>Effects</h1>
           <ul>
-            <li class="fragment">Any update action can also cause an effect</li>
-            <li class="fragment">Effects trigger an asyncronous operation</li>
-            <li class="fragment">Effects run n Elmruntime  and eventually produce Msg</li>
-            <li class="fragment">The resultng Msg triggers an update action</li>
-            <li class="fragment">Effects use same architecture as internal ops</li>
-            <li class="fragment">This results in predictable behavior</li>
+            <li>Any update action can also cause an effect</li>
+            <li>Effects trigger an asyncronous operation</li>
+            <li>Effects run in Elm runtime and eventually produce Msg</li>
+            <li>The resultng Msg triggers an update action</li>
+            <li>Effects use same architecture as internal ops</li>
+            <li>This results in predictable behavior</li>
           </ul>
         </section>
 
@@ -261,43 +394,44 @@ main =
         <section>
           <h1>Uncertainty</h1>
           <ul>
-            <li class="fragment">All execution uncertainty must be handled</li>
-            <li class="fragment">Compiler will not allow unkown results</li>
-            <li class="fragment">There are no null or undefined data types</li>
-            <li class="fragment">Maybe type used to denote lack of valid data</li>
-            <li class="fragment">Code must always handle Maybe</li>
-            <li class="fragment">End result - "undefined is not a function" never happens!</li>
+            <li>All execution uncertainty must be handled</li>
+            <li>Compiler will not allow unkown results</li>
+            <li>There are no null or undefined data types</li>
+            <li>Maybe type used to denote lack of valid data</li>
+            <li>Code must always handle Maybe</li>
+            <li>End result - "undefined is not a function" never happens!</li>
           </ul>
         </section>
 
         <section>
           <h1>JavaScript Interop</h1>
           <ul>
-            <li class="fragment">Elm components can coexist on existing pages</li>
+            <li>Elm components can co-exist on existing pages</li>
             <ul>
-              <li class="fragment">Elm apps can be embedded in existing HTML pages</li>
-              <li class="fragment">React components can be Elm apps under the hood</li>
+              <li>Elm apps can be embedded in existing HTML pages</li>
+              <li>React components can be Elm apps under the hood</li>
             </ul>
-            <li class="fragment">Elm apps can communicate with external JavaScript</li>
+        </section>
+
+        <section>
+          <h1>JavaScript Interop</h1>
+          <ul>
+            <li>Elm apps can communicate with external JavaScript</li>
             <ul>
-              <li class="fragment">Msgs sent to external JS via JSON</li>
-              <li class="fragment">Results returned via Elm subscriptions</li>
+              <li>Msgs sent to external JS via JSON</li>
+              <li>Results returned via Elm subscriptions</li>
             </ul>
           </ul>
         </section>
 
         <section>
-          <h1>Examples</h1>
-        </section>
-
-        <section>
           <h1>State of Elm</h1>
           <ul>
-            <li class="fragment">Still in pre-release</li>
-            <li class="fragment">New releases bring breaking changes</li>
-            <li class="fragment">Friendly and enthusiastic community</li>
-            <li class="fragment">Handful of companies using in production</li>
-            <li class="fragment">Open source development funded by No Red Ink</li>
+            <li>Still in pre-release</li>
+            <li>New releases bring breaking changes</li>
+            <li>Friendly and enthusiastic community</li>
+            <li>Handful of companies using in production</li>
+            <li>Open source development funded by No Red Ink</li>
           </ul>
         </section>
 
@@ -324,30 +458,8 @@ main =
             <li><a href="https://guide.elm-lang.org/architecture/">Elm Architecture</a></li>
             <li><a href="https://www.manning.com/books/elm-in-action">Elm in Action</a></li>
             <li><a href="https://www.meetup.com/Boston-Elm/">Boston Elm Meetup</a></li>
-            <li><a href="http://elmlang.herokuapp.com/">Elm Slack</a></li>
+            <li><a href="http://elmlang.slack.com/">Elm Slack</a></li>
             <li><a href="http://becoming-functional.com">becoming-functional.com</a></li>
-          </ul>
-        </section>
-
-      </div>
-    </div>
-
-    <script src="lib/js/head.min.js"></script>
-    <script src="js/reveal.js"></script>
-
-    <script>
-        <section>
-          <h1>Summary</h1>
-          <ul>
-            <li class="fragment">Elm addresses many current front-end pain points</li>
-            <ul>
-              <li class="fragment">Components - offers React like components</li>
-              <li class="fragment">State Management - Redux pattern is based on Elm</li>
-              <li class="fragment">Virtual Dom - as fast or faster than React rendering</li>
-              <li class="fragment">Functional Programming - no  need for libraries</li>
-              <li class="fragment">Runtime Errors - They don't exist in Elm</li>
-              <li class="fragment">Interop - plays well wit legacy code</li>
-            </ul>
           </ul>
         </section>
 
