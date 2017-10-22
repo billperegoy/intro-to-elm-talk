@@ -248,7 +248,7 @@ view model =
            h1 [] [ text "Todo List" ]
          , ul [] 
              List.map 
-                 (/todo -> li [] [ text todo.name ])
+                 (\todo -> li [] [ text todo.name ])
                  model.todos
 
          ]
@@ -272,7 +272,7 @@ init =
           </code></pre>
           <ul>
             <li>Define the initial state of the model</li>
-            <li>Everything must be initailized</li>
+            <li>Everything must be initialized</li>
           </ul>
         </section>
 
@@ -373,7 +373,7 @@ main =
             <li>Any update action can also cause an effect</li>
             <li>Effects trigger an asyncronous operation</li>
             <li>Effects run in Elm runtime and eventually produce Msg</li>
-            <li>The resultng Msg triggers an update action</li>
+            <li>The resulting Msg triggers an update action</li>
             <li>Effects use same architecture as internal ops</li>
             <li>This results in predictable behavior</li>
           </ul>
